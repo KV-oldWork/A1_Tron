@@ -86,3 +86,23 @@ _low_
 
 Tests:
 _When the user presses a button, will the light trail turn on and off? Does it get stuck?
+
+##Spike User Stories
+
+###Spike Story 1:
+As a user, I want to send a message to a server and have it read?
+
+Notes:
+
+Estimate:
+_5 hours_
+
+Priority: High
+
+Tests: When the user sends presses a keyboard button, will the button pressed be recieved and read by the server.
+
+###Spike Story 2:
+
+As a user, I want to be able to send multiple strings to a server and have them read.
+
+### Spike Story 3:
