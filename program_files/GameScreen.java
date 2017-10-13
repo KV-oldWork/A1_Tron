@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-public class Screen extends JPanel implements Runnable
+public class GameScreen extends JPanel implements Runnable
 {
     public static final int Width = 800, Height = 800;
     private Thread thread;
@@ -22,7 +22,7 @@ public class Screen extends JPanel implements Runnable
 
     private userKey userKey;
 
-    public Screen()
+    public GameScreen()
     {
         setFocusable(true);
         userKey = new userKey();
@@ -136,40 +136,22 @@ public class Screen extends JPanel implements Runnable
         public void keyPressed(KeyEvent e)
         {
             int key = e.getKeyCode();
-            if(up == true)
+
+            if(key == KeyEvent.VK_RIGHT && !left)
             {
-                if(key == KeyEvent.VK_RIGHT)
-                {
-                    up = false;
-                    down = false;
-                    left = false;
-                    right = true;
-                }
-                if(key== KeyEvent.VK_LEFT)
-                {
-                    down = false;
-                    up = false;
-                    left = true;
-                    right = false;
-                }
+                up = false;
+                down = false;
+                left = false;
+                right = true;
             }
-            if(left == true)
+            if(key== KeyEvent.VK_LEFT && !right)
             {
-                if(key == KeyEvent.VK_RIGHT)
-                {
-                    up = true;
-                    down = false;
-                    left = false;
-                    right = false;
-                }
-                if(key== KeyEvent.VK_LEFT)
-                {
-                    down = false;
-                    up = false;
-                    left = true;
-                    right = false;
-                }
+                down = false;
+                up = false;
+                left = true;
+                right = false;
             }
+
 
             if(key == KeyEvent.VK_UP && !down)
             {
