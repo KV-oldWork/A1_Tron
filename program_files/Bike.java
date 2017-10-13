@@ -11,11 +11,6 @@ public class Bike
         height = pixSize;
     }
 
-    public void tick()
-    {
-
-    }
-
     public void draw(Graphics g)
     {
         g.setColor(Color.BLACK);

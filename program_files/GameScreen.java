@@ -10,11 +10,13 @@ public class GameScreen extends JPanel implements Runnable
     private Thread thread;
     private boolean running = false;
 
+    private final double UPDATE_CAP = 1.0/20.0;
+
     private Bike b;
     private ArrayList<Bike> bikesBody;
 
     private int xPos = 10, yPos = 40;
-    private int size = 5;
+    private int size = 1;
 
     private boolean up = true, down = false, left = false, right = false;
 
@@ -62,12 +64,13 @@ public class GameScreen extends JPanel implements Runnable
         }
 
         ticks++;
-        if(ticks > 400000)
+
+        if(ticks > 1)
         {
-            if(right) xPos++;
-            if(left) xPos--;
-            if(up) yPos--;
-            if(down) yPos++;
+            if(right) xPos += 2;
+            if(left) xPos -= 2;
+            if(up) yPos -= 2;
+            if(down) yPos += 2;
 
             ticks = 0;
 
@@ -105,28 +108,82 @@ public class GameScreen extends JPanel implements Runnable
     public void start()
     {
         running = true;
-        thread = new Thread(this, "Game Loop");
+        thread = new Thread(this, "Game boop");
         thread.start();
     }
 
     public void stop()
     {
         running = false;
-        try {
+        try
+        {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+
+    ///game loop
     public void run()
     {
+        boolean render = false;
+        double firstTime = 0;
+        double lastTime = System.nanoTime() / 1000000000.0;
+        double passedTime = 0;
+        double unprocessedTime = 0;
+
+        double frameTime = 0;
+        int frames = 0;
+        int fps = 0;
+
+
         while(running)
         {
-            tick();
-            repaint();
+            render = false;
+
+            firstTime = System.nanoTime() / 1000000000.0;
+            passedTime = firstTime - lastTime;
+            lastTime = firstTime;
+
+            unprocessedTime += passedTime;
+            frameTime += passedTime;
+
+
+
+            while(unprocessedTime >= UPDATE_CAP)
+            {
+                unprocessedTime -= UPDATE_CAP;
+                render = true;
+                if(frameTime >= 1.0)
+                {
+                    frameTime = 0;
+                    ///fps = frames;
+                    frames = 0;
+                    ///System.out.println(fps);
+                }
+                tick();
+
+            }
+
+            if(render)
+            {
+                repaint();
+                frames ++;
+            }
+            else
+                {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
         }
     }
+
+    ///Gets User KeyBoard Input
     private class userKey implements KeyListener
     {
         public void keyTyped(KeyEvent e)
@@ -151,7 +208,6 @@ public class GameScreen extends JPanel implements Runnable
                 left = true;
                 right = false;
             }
-
 
             if(key == KeyEvent.VK_UP && !down)
             {
