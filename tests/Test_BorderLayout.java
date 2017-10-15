@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class testBorderLayout
+public class Test_BorderLayout
 {
     JFrame frame1 = new JFrame("BorderLayout Demo");
     JButton btn1 = new JButton("nowth");
@@ -10,7 +10,7 @@ public class testBorderLayout
     JButton btn4 = new JButton("westsss");
     JButton btn5 = new JButton("CENTA BOIZ");
 
-    public testBorderLayout()
+    public Test_BorderLayout()
     {
         frame1.setLayout(new BorderLayout());
         frame1.add(btn1,BorderLayout.NORTH);
@@ -25,7 +25,7 @@ public class testBorderLayout
     }
 
     public static void main(String[] args) {
-        new testBorderLayout();
+        new Test_BorderLayout();
 
     }
 }

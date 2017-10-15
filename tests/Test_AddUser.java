@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class Add_Player
+public class Test_AddUser
 {
 
     public static String getUserName()

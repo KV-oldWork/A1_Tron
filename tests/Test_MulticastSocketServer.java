@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 
-    public class MulticastSocketServer {
+    public class Test_MulticastSocketServer {
         final static String INET_ADDR = "224.0.0.3";
         final static int PORT = 8888;
 

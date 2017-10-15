@@ -36,6 +36,7 @@ public class GameUserWindow extends JFrame
 
     }
 
+    ///Black borders of the tron game
     private class displayLabel extends JPanel
     {
         private final Integer minWidth = 100, minHeight = 100;
