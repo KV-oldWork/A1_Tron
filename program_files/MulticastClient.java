@@ -2,26 +2,29 @@ import com.sun.org.apache.bcel.internal.classfile.Unknown;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
 
-public class MulticastServer extends Thread {
-    Integer numberOfPlayers = 1;
-    ArrayList<String> playerDetails = new ArrayList<String>(4 * numberOfPlayers);
+public class MulticastClient extends Thread
+{
+    private InetAddress ADDR;
     final static int PORT = 8888;
     private DatagramSocket socket;
-    private boolean preGame = true, inGame = false, finGame = false;
 
-
-    public MulticastServer() {
+    public MulticastClient( String ADDR)
+    {
         try {
-            this.socket = new DatagramSocket(8888);
+            this.socket = new DatagramSocket();
+            this.ADDR = InetAddress.getByName(ADDR);
         } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
             e.printStackTrace();
         }
     }
 
-    public void run() {
-        while (true) {
+    public void run()
+    {
+        while (true)
+        {
             byte[] messageBuffer = new byte[1024];
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             try {
@@ -30,16 +33,12 @@ public class MulticastServer extends Thread {
                 e.printStackTrace();
             }
             String message = new String(packet.getData());
-            System.out.println("client ["+packet.getAddress().getHostAddress()+":"+packet.getPort()+"]- " + message);
-            if (message.trim().equalsIgnoreCase("ping")) {
-                sendData("pong".getBytes(), packet.getAddress(), packet.getPort());
-            }
+            System.out.println("server - "+ message);
         }
-
     }
 
-    //function that sends a message to the client
-    public void sendData(byte[] messageBuffer, InetAddress ADDR, int PORT) {
+    public void sendData(byte[] messageBuffer)
+    {
         DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length, ADDR, PORT);
         try {
             socket.send(packet);

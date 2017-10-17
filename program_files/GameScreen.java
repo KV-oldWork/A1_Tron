@@ -17,8 +17,10 @@ public class GameScreen extends JPanel implements Runnable
 
     private int xPos = 10, yPos = 40;
     private int size = 1;
-
     private boolean up = true, down = false, left = false, right = false;
+
+    private MulticastClient socketClient;
+    private MulticastServer socketServer;
 
     private int ticks = 0;
 
@@ -103,13 +105,27 @@ public class GameScreen extends JPanel implements Runnable
         {
             bikesBody.get(i).draw(g);
         }
+
+        socketClient.sendData("ping".getBytes());
     }
 
     public void start()
     {
+        ///Asks the user if they want to host the server
+        if(JOptionPane.showConfirmDialog(this, "Do you want to run the server?")==0)
+        {
+            socketServer = new MulticastServer();
+            socketServer.start();
+        }
+        socketClient = new MulticastClient( "localHost");
+        socketClient.start();
+
         running = true;
         thread = new Thread(this, "Game boop");
         thread.start();
+
+
+
     }
 
     public void stop()

@@ -33,7 +33,6 @@ public class GameUserWindow extends JFrame
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
     }
 
     ///Black borders of the tron game
