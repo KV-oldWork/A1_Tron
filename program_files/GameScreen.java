@@ -123,12 +123,18 @@ public class GameScreen extends JPanel implements Runnable
 
     public void start()
     {
+
         ///Asks the user if they want to host the server
         if(JOptionPane.showConfirmDialog(this, "Do you want to run the server?")==0)
         {
             socketServer = new MulticastServer();
             socketServer.start();
         }
+
+        String name = JOptionPane.showInputDialog("What's your name?");
+        String getColor = JOptionPane.showInputDialog("What's your color? (1-4)");
+        Integer color = Integer.parseInt(getColor);
+        Player player = new Player(2,3, 24, color, name, false);
         socketClient = new MulticastClient( "localHost");
         socketClient.start();
 
