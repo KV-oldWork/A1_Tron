@@ -12,12 +12,14 @@ public class GameScreen extends JPanel implements Runnable
 
     private final double UPDATE_CAP = 1.0/20.0;
 
-    private Bike b;
-    private ArrayList<Bike> bikesBody;
+    private ObjectPiece b;
+    private ArrayList<ObjectPiece> bikesBody;
 
+//    TODO: private int numberOfPlayers; (total number of players connectected
+//    to the server, loops through drawing method)
     private int xPos = 10, yPos = 40;
     private int size = 1;
-    private boolean up = true, down = false, left = false, right = false;
+    private boolean up, down, left, right;
 
     private MulticastClient socketClient;
     private MulticastServer socketServer;
@@ -28,22 +30,32 @@ public class GameScreen extends JPanel implements Runnable
 
     public GameScreen()
     {
+        this.right = true;
+        this.left = false;
+        this.up = false;
+        this.down = false;
         setFocusable(true);
         userKey = new userKey();
         addKeyListener(userKey);
 
         setPreferredSize(new Dimension(Width, Height));
 
-        bikesBody = new ArrayList<Bike>();
+        bikesBody = new ArrayList<ObjectPiece>();
 
         start();
     }
+
+    public boolean getUp()
+    {
+        return this.up;
+    }
+
 
     public void tick()
     {
         if(bikesBody.size() == 0)
         {
-            b = new Bike(xPos, yPos, 10);
+            b = new ObjectPiece(xPos, yPos, 10);
             bikesBody.add(b);
         }
 
@@ -76,7 +88,7 @@ public class GameScreen extends JPanel implements Runnable
 
             ticks = 0;
 
-            b = new Bike(xPos, yPos, 10);
+            b = new ObjectPiece(xPos, yPos, 10);
             bikesBody.add(b);
 
             if(bikesBody.size() > size)

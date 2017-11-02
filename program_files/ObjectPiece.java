@@ -1,14 +1,14 @@
 import java.awt.*;
 
-public class Bike
+public class ObjectPiece
 {
     private int xPos, yPos, width, height;
-    public Bike(int xPos, int yPos, int pixSize)
+    public ObjectPiece(int xPos, int yPos, int pixSize)
     {
         this.xPos = xPos;
         this.yPos = yPos;
-        width = pixSize;
-        height = pixSize;
+        this.width = pixSize;
+        this.height = pixSize;
     }
 
     public void draw(Graphics g)
