@@ -20,7 +20,7 @@ public class GameScreen extends JPanel implements Runnable
 //    to the server, loops through drawing method)
     Player clientSidePlayer = new Player(1, 1, 0, 1, "dad", false);
 
-    private int size = 4;
+    private int clientSideSize = 4;
     private boolean up, down, left, right;
 
     private MulticastClient socketClient;
@@ -45,11 +45,6 @@ public class GameScreen extends JPanel implements Runnable
         bikesBody = new ArrayList<ObjectPiece>();
 
         start();
-    }
-
-    public boolean getUp()
-    {
-        return this.up;
     }
 
 
@@ -95,10 +90,14 @@ public class GameScreen extends JPanel implements Runnable
             b = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
             bikesBody.add(b);
 
-            if(bikesBody.size() > size)
+            // Removes a block if it exceeds the maximum number of size bois.
+            if(bikesBody.size() > clientSideSize)
             {
                 bikesBody.remove(0);
             }
+
+            ///TODO: this line of code will eventually send the packet with details about this player.
+            socketClient.sendData("running".getBytes());
         }
     }
 
@@ -121,8 +120,6 @@ public class GameScreen extends JPanel implements Runnable
         {
             bikesBody.get(i).draw(g);
         }
-
-        socketClient.sendData("vping".getBytes());
     }
 
     public void start()
@@ -149,11 +146,23 @@ public class GameScreen extends JPanel implements Runnable
         clientSidePlayer.setY(y);
         clientSidePlayer.setColour(color);
         clientSidePlayer.setPlayerName(name);
+        socketClient.sendData("waiting on u babey".getBytes());
+        try {
+            thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ///your trying to make a 10 second count down from the server to user in waiting period, good luck future kyle. You'll need it.
+        Integer serverStatus = socketClient.getServerStatus();
+        while (serverStatus == 1)
+        {
+            serverStatus = socketClient.getServerStatus();
+            socketClient.sendData("waiting on u baby.P2".getBytes());
+        }
+
         running = true;
         thread = new Thread(this, "Game boop");
         thread.start();
-
-
 
     }
 

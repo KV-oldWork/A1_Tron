@@ -5,11 +5,12 @@ import java.net.*;
 import java.util.ArrayList;
 
 public class MulticastServer extends Thread {
-    Integer numberOfPlayers = 1;
+    Integer numberOfPlayers = 0;
     ArrayList<String> playerDetails = new ArrayList<String>(4 * numberOfPlayers);
     final static int PORT = 8888;
     private DatagramSocket socket;
     private boolean preGame = true, inGame = false, finGame = false;
+
 
 
     public MulticastServer() {
@@ -22,6 +23,7 @@ public class MulticastServer extends Thread {
 
     public void run() {
         while (true) {
+            String preGameSearchWord = "Waiting", inGameSearchWord = "Running";
             byte[] messageBuffer = new byte[1024];
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             try {
@@ -30,9 +32,18 @@ public class MulticastServer extends Thread {
                 e.printStackTrace();
             }
             String message = new String(packet.getData());
+
+            if(message.toLowerCase().indexOf(preGameSearchWord.toLowerCase()) != -1)
+            {
+                sendData("waiting for players".getBytes(), packet.getAddress(), packet.getPort());
+                numberOfPlayers ++;
+            }
+
             System.out.println("client ["+packet.getAddress().getHostAddress()+":"+packet.getPort()+"]- " + message);
-            if (message.trim().equalsIgnoreCase("ping")) {
-                sendData("pong".getBytes(), packet.getAddress(), packet.getPort());
+            if (message.trim().equalsIgnoreCase("RUNNING"))
+            {
+                sendData("program is running".getBytes(), packet.getAddress(), packet.getPort());
+                System.out.println("dude, theres "+numberOfPlayers+" players connected!!!");
             }
         }
 

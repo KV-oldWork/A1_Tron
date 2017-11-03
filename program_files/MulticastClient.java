@@ -8,6 +8,9 @@ public class MulticastClient extends Thread
     private InetAddress ADDR;
     final static int PORT = 8888;
     private DatagramSocket socket;
+    private Integer serverStatus;
+    private String outMessage;
+    private Integer counter = 0;
 
     public MulticastClient( String ADDR)
     {
@@ -25,6 +28,7 @@ public class MulticastClient extends Thread
     {
         while (true)
         {
+            String preGameSearchWord = "Waiting",inGameSearchWord = "Running";
             byte[] messageBuffer = new byte[1024];
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             try {
@@ -34,6 +38,18 @@ public class MulticastClient extends Thread
             }
             String message = new String(packet.getData());
             System.out.println("server - "+ message);
+            if(message.toLowerCase().indexOf(preGameSearchWord.toLowerCase()) != -1  && (counter < 20))
+            {
+                serverStatus = 1;
+                System.out.println(counter);
+            }
+            counter ++;
+
+            if(message.toLowerCase().indexOf(inGameSearchWord.toLowerCase()) != -1)
+            {
+                serverStatus = 2;
+            }
+
         }
     }
 
@@ -45,5 +61,15 @@ public class MulticastClient extends Thread
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Integer getServerStatus()
+    {
+        return serverStatus;
+    }
+
+    public String getMessage()
+    {
+        return outMessage;
     }
 }
