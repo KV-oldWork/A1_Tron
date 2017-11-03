@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameScreen extends JPanel implements Runnable
 {
@@ -17,8 +18,9 @@ public class GameScreen extends JPanel implements Runnable
 
 //    TODO: private int numberOfPlayers; (total number of players connectected
 //    to the server, loops through drawing method)
-    private int xPos = 10, yPos = 40;
-    private int size = 1;
+    Player clientSidePlayer = new Player(1, 1, 0, 1, "dad", false);
+
+    private int size = 4;
     private boolean up, down, left, right;
 
     private MulticastClient socketClient;
@@ -55,14 +57,14 @@ public class GameScreen extends JPanel implements Runnable
     {
         if(bikesBody.size() == 0)
         {
-            b = new ObjectPiece(xPos, yPos, 10);
+            b = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
             bikesBody.add(b);
         }
 
         /// stops the game if the bike collides with itself
         for(int i = 0; i < bikesBody.size(); i++)
         {
-            if(xPos == bikesBody.get(i).getxPos() && yPos == bikesBody.get(i).getyPos())
+            if(clientSidePlayer.getX() == bikesBody.get(i).getxPos() && clientSidePlayer.getY() == bikesBody.get(i).getyPos())
             {
                 if(i != bikesBody.size() - 1)
                 {
@@ -72,7 +74,7 @@ public class GameScreen extends JPanel implements Runnable
         }
 
         /// stops the game if the bike goes out of bounds
-        if(xPos < 1 || xPos > 78 || yPos < 1 || yPos > 78)
+        if(clientSidePlayer.getX() < 1 || clientSidePlayer.getX() > 78 || clientSidePlayer.getY() < 1 || clientSidePlayer.getY() > 78)
         {
             stop();
         }
@@ -81,14 +83,16 @@ public class GameScreen extends JPanel implements Runnable
 
         if(ticks > 1)
         {
-            if(right) xPos += 2;
-            if(left) xPos -= 2;
-            if(up) yPos -= 2;
-            if(down) yPos += 2;
+            int currentX = clientSidePlayer.getX(), currentY = clientSidePlayer.getY();
+
+            if(right) clientSidePlayer.setX(currentX +=1);
+            if(left) clientSidePlayer.setX(currentX -= 1) ;
+            if(up) clientSidePlayer.setY(currentY -= 1) ;
+            if(down) clientSidePlayer.setY(currentY += 1) ;
 
             ticks = 0;
 
-            b = new ObjectPiece(xPos, yPos, 10);
+            b = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
             bikesBody.add(b);
 
             if(bikesBody.size() > size)
@@ -118,7 +122,7 @@ public class GameScreen extends JPanel implements Runnable
             bikesBody.get(i).draw(g);
         }
 
-        socketClient.sendData("ping".getBytes());
+        socketClient.sendData("vping".getBytes());
     }
 
     public void start()
@@ -134,10 +138,17 @@ public class GameScreen extends JPanel implements Runnable
         String name = JOptionPane.showInputDialog("What's your name?");
         String getColor = JOptionPane.showInputDialog("What's your color? (1-4)");
         Integer color = Integer.parseInt(getColor);
-        Player player = new Player(2,3, 24, color, name, false);
+
+        // randomizes spawn position of the main player
+        Random rand = new Random();
+        int x = rand.nextInt(50) + 20;
+        int y = rand.nextInt(50) + 20;
         socketClient = new MulticastClient( "localHost");
         socketClient.start();
-
+        clientSidePlayer.setX(x);
+        clientSidePlayer.setY(y);
+        clientSidePlayer.setColour(color);
+        clientSidePlayer.setPlayerName(name);
         running = true;
         thread = new Thread(this, "Game boop");
         thread.start();
@@ -171,7 +182,6 @@ public class GameScreen extends JPanel implements Runnable
         int frames = 0;
         int fps = 0;
 
-
         while(running)
         {
             render = false;
@@ -182,8 +192,6 @@ public class GameScreen extends JPanel implements Runnable
 
             unprocessedTime += passedTime;
             frameTime += passedTime;
-
-
 
             while(unprocessedTime >= UPDATE_CAP)
             {

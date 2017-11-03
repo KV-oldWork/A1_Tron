@@ -15,7 +15,6 @@ public class Player
         this.colour = colour;
         this.playerName = playerName;
         this.trailStatus = trailStatus;
-        setStartingPos();
     }
 
     public int getX()
@@ -78,16 +77,7 @@ public class Player
         this.trailStatus = f;
     }
 
-
-    //this needs to be out in the main or something, where they first create the player
-    public void setStartingPos()
-    {
-        Random rand = new Random();
-        x = rand.nextInt(650) + 150;
-        y = rand.nextInt(650) + 150;
-        System.out.println("random x = "+x+"\nrandom y = "+y);
-    }
-    public static void main(String[]args)
+   public static void main(String[]args)
     {
         new Player(2,2,2,2,"ye",true);
     }
