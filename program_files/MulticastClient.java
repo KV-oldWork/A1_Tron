@@ -9,8 +9,10 @@ public class MulticastClient extends Thread
     final static int PORT = 8888;
     private DatagramSocket socket;
     private Integer serverStatus;
+    /// 1 is player connected, 2 is waiting for players, 3 is in game
     private String outMessage;
     private Integer counter = 0;
+
 
     public MulticastClient( String ADDR)
     {
@@ -28,7 +30,7 @@ public class MulticastClient extends Thread
     {
         while (true)
         {
-            String preGameSearchWord = "Waiting",inGameSearchWord = "Running";
+            String connectedPlayerWord = "Connected", preGameWord = "waiting", inGameWord = "Running";
             byte[] messageBuffer = new byte[1024];
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             try {
@@ -38,16 +40,30 @@ public class MulticastClient extends Thread
             }
             String message = new String(packet.getData());
             System.out.println("server - "+ message);
-            if(message.toLowerCase().indexOf(preGameSearchWord.toLowerCase()) != -1  && (counter < 20))
+
+            ///checks for players connecting
+            if(message.toLowerCase().indexOf(connectedPlayerWord.toLowerCase()) != -1)
             {
                 serverStatus = 1;
-                System.out.println(counter);
+                System.out.println("serverStatus 1 - connected");
             }
-            counter ++;
 
-            if(message.toLowerCase().indexOf(inGameSearchWord.toLowerCase()) != -1)
+            if(message.toLowerCase().indexOf(preGameWord.toLowerCase()) != -1)
             {
                 serverStatus = 2;
+                System.out.println("serverStatus2 - waiting");
+            }
+
+
+            if(counter == 20)
+            {
+                message = "program is running";
+            }
+
+            if(message.toLowerCase().indexOf(inGameWord.toLowerCase()) != -1)
+            {
+                serverStatus = 3;
+                System.out.println("serverStatus3 - running");
             }
 
         }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class MulticastServer extends Thread {
     Integer numberOfPlayers = 0;
+    long waitTimeLimit = 90000 * 70000, startTime;
     ArrayList<String> playerDetails = new ArrayList<String>(4 * numberOfPlayers);
     final static int PORT = 8888;
     private DatagramSocket socket;
@@ -23,7 +24,7 @@ public class MulticastServer extends Thread {
 
     public void run() {
         while (true) {
-            String preGameSearchWord = "Waiting", inGameSearchWord = "Running";
+            String connectedPlayerWord = "connected", preGameWord = "waiting", inGameWord = "Running";
             byte[] messageBuffer = new byte[1024];
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             try {
@@ -33,12 +34,25 @@ public class MulticastServer extends Thread {
             }
             String message = new String(packet.getData());
 
-            if(message.toLowerCase().indexOf(preGameSearchWord.toLowerCase()) != -1)
+            ///if new player connects, plus 1
+            if(message.toLowerCase().indexOf(connectedPlayerWord.toLowerCase()) != -1)
             {
-                sendData("waiting for players".getBytes(), packet.getAddress(), packet.getPort());
+                sendData("Successful: now waiting".getBytes(), packet.getAddress(), packet.getPort());
                 numberOfPlayers ++;
             }
 
+            ///if client is sending waiting phase messages
+            if(message.toLowerCase().indexOf(preGameWord.toLowerCase()) != -1)
+            {
+                sendData("waiting for players".getBytes(), packet.getAddress(), packet.getPort());
+                long startTime = System.nanoTime();
+                if (startTime > waitTimeLimit)
+                {
+                    sendData("game is running".getBytes(), packet.getAddress(), packet.getPort());
+                }
+            }
+
+            ///if game has started
             System.out.println("client ["+packet.getAddress().getHostAddress()+":"+packet.getPort()+"]- " + message);
             if (message.trim().equalsIgnoreCase("RUNNING"))
             {

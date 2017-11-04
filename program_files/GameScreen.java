@@ -146,7 +146,7 @@ public class GameScreen extends JPanel implements Runnable
         clientSidePlayer.setY(y);
         clientSidePlayer.setColour(color);
         clientSidePlayer.setPlayerName(name);
-        socketClient.sendData("waiting on u babey".getBytes());
+        socketClient.sendData("Connected to server".getBytes());
         try {
             thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -154,10 +154,16 @@ public class GameScreen extends JPanel implements Runnable
         }
         ///your trying to make a 10 second count down from the server to user in waiting period, good luck future kyle. You'll need it.
         Integer serverStatus = socketClient.getServerStatus();
-        while (serverStatus == 1)
+
+        while (serverStatus == 2)
         {
             serverStatus = socketClient.getServerStatus();
-            socketClient.sendData("waiting on u baby.P2".getBytes());
+            socketClient.sendData("waiting(IN GAME SCREEN".getBytes());
+            try {
+                thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         running = true;
