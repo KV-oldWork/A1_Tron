@@ -50,12 +50,22 @@ public class MulticastServer extends Thread {
     }
 
     //function that sends a message to the client
-    public void sendData(byte[] messageBuffer, InetAddress ADDR, int PORT) {
-        DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length, ADDR, PORT);
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void sendData(byte[] messageBuffer, InetAddress ADDR, int PORT)
+    {
+        Thread thread = new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length, ADDR, PORT);
+                try
+                {
+                    socket.send(packet);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 }

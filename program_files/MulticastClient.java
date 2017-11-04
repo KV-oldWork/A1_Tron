@@ -55,12 +55,23 @@ public class MulticastClient extends Thread
 
     public void sendData(byte[] messageBuffer)
     {
-        DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length, ADDR, PORT);
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Thread thread = new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length, ADDR, PORT);
+                try
+                {
+                    socket.send(packet);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+
+
     }
 
     public Integer getServerStatus()
