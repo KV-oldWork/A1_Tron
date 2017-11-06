@@ -9,7 +9,10 @@ public class Test_TimerTesting extends Thread
 
         long duration = (endTime - startTime);
 
+        Integer coool = 200;
         System.out.println(duration);
+        System.out.println("wow"+coool);
+
     }
 }
 

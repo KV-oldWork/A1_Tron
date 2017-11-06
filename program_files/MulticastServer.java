@@ -3,13 +3,16 @@ import com.sun.org.apache.bcel.internal.classfile.Unknown;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MulticastServer extends Thread {
-    Integer numberOfPlayers = 0;
-    long waitTimeLimit = 90000 * 70000, startTime;
+    Integer numberOfPlayers = 0, waitTimer =0;
+    long startTime;
     ArrayList<String> playerDetails = new ArrayList<String>(4 * numberOfPlayers);
     final static int PORT = 8888;
     private DatagramSocket socket;
+    List<Player> playerList = new ArrayList<Player>();
     private boolean preGame = true, inGame = false, finGame = false;
 
 
@@ -23,8 +26,10 @@ public class MulticastServer extends Thread {
     }
 
     public void run() {
+        Thread newThread = new Thread();
+        newThread.start();
         while (true) {
-            String connectedPlayerWord = "connected", preGameWord = "waiting", inGameWord = "Running";
+            String connectedPlayerWord = "connected", preGameWord = "waiting", inGameWord = "running";
             byte[] messageBuffer = new byte[1024];
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             try {
@@ -38,6 +43,17 @@ public class MulticastServer extends Thread {
             if(message.toLowerCase().indexOf(connectedPlayerWord.toLowerCase()) != -1)
             {
                 sendData("Successful: now waiting".getBytes(), packet.getAddress(), packet.getPort());
+
+                //takes the connection message from user and converts it into a player object
+                List<String>  holdingList = new ArrayList<String>(Arrays.asList(message.split(" ")));
+                Integer holdX = Integer.parseInt(holdingList.get(3)), holdY = Integer.parseInt(holdingList.get(4));
+                Integer holdScore = Integer.parseInt(holdingList.get(5)), holdColor = Integer.parseInt(holdingList.get(6));
+                Boolean holdTrail = Boolean.parseBoolean(holdingList.get(8));
+                playerList.add(new Player(holdX, holdY, holdScore, holdColor, holdingList.get(7), holdTrail));
+                waitTimer = 0;
+
+                ///THIS WORKS LEL
+                System.out.println(playerList.get(0).getX());
                 numberOfPlayers ++;
             }
 
@@ -45,18 +61,36 @@ public class MulticastServer extends Thread {
             if(message.toLowerCase().indexOf(preGameWord.toLowerCase()) != -1)
             {
                 sendData("waiting for players".getBytes(), packet.getAddress(), packet.getPort());
-                long startTime = System.nanoTime();
-                if (startTime > waitTimeLimit)
+                waitTimer ++;
+                System.out.println(waitTimer);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (waitTimer >= 5)
                 {
-                    sendData("game is running".getBytes(), packet.getAddress(), packet.getPort());
+                    String numberOfPlayersString = numberOfPlayers.toString();
+                    sendData(("Number of players: "+numberOfPlayersString).getBytes(), packet.getAddress(), packet.getPort());
+                    sendData("Game is running...".getBytes(), packet.getAddress(), packet.getPort());
                 }
             }
 
             ///if game has started
-            System.out.println("client ["+packet.getAddress().getHostAddress()+":"+packet.getPort()+"]- " + message);
-            if (message.trim().equalsIgnoreCase("RUNNING"))
+            System.out.println("Client IP: ["+packet.getAddress().getHostAddress()+":"+packet.getPort()+"]- " + message);
+            if (message.toLowerCase().indexOf(inGameWord.toLowerCase()) != -1)
             {
-                sendData("program is running".getBytes(), packet.getAddress(), packet.getPort());
+
+                ArrayList<String> messageList = new ArrayList<String>();
+                for(int i = 0; numberOfPlayers > i;)
+                {
+                    packData packPlayers = new packData(playerList.get(i).getX(), playerList.get(i).getY(), playerList.get(i).getScore(), playerList.get(i).getColour(), playerList.get(i).getPlayerName(), playerList.get(i).getTrailStatus());
+                    String combinedVars = packPlayers.buildStuffs();
+                    messageList.add(combinedVars);
+                    i++;
+                }
+                String finalMessage = String.join(" ", messageList);
+                sendData(("Running "+ finalMessage).getBytes(), packet.getAddress(), packet.getPort());
                 System.out.println("dude, theres "+numberOfPlayers+" players connected!!!");
             }
         }
@@ -81,5 +115,15 @@ public class MulticastServer extends Thread {
             }
         });
         thread.start();
+    }
+
+    public Integer getNumberOfPlayers()
+    {
+        return numberOfPlayers;
+    }
+
+    public Integer getWaitTimer()
+    {
+        return waitTimer;
     }
 }

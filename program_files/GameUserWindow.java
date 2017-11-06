@@ -13,6 +13,8 @@ public class GameUserWindow extends JFrame
         setTitle("Tron");
         setResizable(false);
 
+
+
         init();
     }
 

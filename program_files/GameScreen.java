@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class GameScreen extends JPanel implements Runnable
@@ -13,15 +14,16 @@ public class GameScreen extends JPanel implements Runnable
 
     private final double UPDATE_CAP = 1.0/20.0;
 
-    private ObjectPiece b;
+    private ObjectPiece trailPiece;
     private ArrayList<ObjectPiece> bikesBody;
 
 //    TODO: private int numberOfPlayers; (total number of players connectected
 //    to the server, loops through drawing method)
     Player clientSidePlayer = new Player(1, 1, 0, 1, "dad", false);
 
-    private int clientSideSize = 4;
-    private boolean up, down, left, right;
+    private int clientSideSize = 1;
+    private boolean up, down, left, right, trail;
+    private int playerScore = 0;
 
     private MulticastClient socketClient;
     private MulticastServer socketServer;
@@ -36,6 +38,8 @@ public class GameScreen extends JPanel implements Runnable
         this.left = false;
         this.up = false;
         this.down = false;
+        this.trail = true;
+
         setFocusable(true);
         userKey = new userKey();
         addKeyListener(userKey);
@@ -45,6 +49,8 @@ public class GameScreen extends JPanel implements Runnable
         bikesBody = new ArrayList<ObjectPiece>();
 
         start();
+
+
     }
 
 
@@ -52,8 +58,8 @@ public class GameScreen extends JPanel implements Runnable
     {
         if(bikesBody.size() == 0)
         {
-            b = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
-            bikesBody.add(b);
+            trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+            bikesBody.add(trailPiece);
         }
 
         /// stops the game if the bike collides with itself
@@ -78,26 +84,69 @@ public class GameScreen extends JPanel implements Runnable
 
         if(ticks > 1)
         {
+            Integer numPlayers = socketServer.getNumberOfPlayers();
+            String finalMessage = socketClient.getFinalMessage();
             int currentX = clientSidePlayer.getX(), currentY = clientSidePlayer.getY();
 
+            //client position setting based of keyPresses.
             if(right) clientSidePlayer.setX(currentX +=1);
             if(left) clientSidePlayer.setX(currentX -= 1) ;
             if(up) clientSidePlayer.setY(currentY -= 1) ;
             if(down) clientSidePlayer.setY(currentY += 1) ;
-
+            if(trail==true) clientSidePlayer.setTrailStatus(true);
+            if(trail==false) clientSidePlayer.setTrailStatus(false);
             ticks = 0;
-
-            b = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
-            bikesBody.add(b);
-
-            // Removes a block if it exceeds the maximum number of size bois.
-            if(bikesBody.size() > clientSideSize)
+            if(numPlayers >= 1)
             {
-                bikesBody.remove(0);
+                ArrayList<Player> finalPlayers = new ArrayList<Player>();
+                ArrayList<String> finalStrings = new ArrayList<String>(Arrays.asList(finalMessage.split(" ")));
+                System.out.println("wtf?"+finalStrings);
+                System.out.println("wowzers"+finalStrings.get(0)+" "+finalStrings.get(1)+" "+finalStrings.get(2)+" "+finalStrings.get(3));
+                Integer first = Integer.parseInt(finalStrings.get(0)), second= Integer.parseInt(finalStrings.get(+1)), third = Integer.parseInt(finalStrings.get(2)), fourth =Integer.parseInt(finalStrings.get(3));
+
+//                int a = 0, b = 1, c = 2, d = 3, e = 4, f = 5;
+//                for(int i = 0; numPlayers > i;)
+//                {
+//                    Integer first = Integer.parseInt(finalStrings.get(a)), second= Integer.parseInt(finalStrings.get(b)), third = Integer.parseInt(finalStrings.get(c)), fourth =Integer.parseInt(finalStrings.get(d));
+//                    Boolean sixth = Boolean.parseBoolean(finalStrings.get(f));
+//
+//                    Player newPlayer = new Player(first ,second, third, fourth , finalStrings.get(e), sixth);
+//                    finalPlayers.add(newPlayer);
+//                    a += 6; b += 6; c += 6; d += 6; e += 6; f += 6;
+//                    System.out.println("ye boi it worked"+newPlayer.getPlayerName());
+//                    i++;
+//                }
+//                for(int i = 0; numPlayers > i;)
+//                {
+//
+//                }
+
             }
 
-            ///TODO: this line of code will eventually send the packet with details about this player.
-            socketClient.sendData("running".getBytes());
+
+
+            if(clientSidePlayer.getTrailStatus() == true)
+            {
+                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+                bikesBody.add(trailPiece);
+            }
+            if(clientSidePlayer.getTrailStatus() == false)
+            {
+                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+                bikesBody.add(trailPiece);
+                if(bikesBody.size() > clientSideSize)
+                {
+
+                    bikesBody.remove(bikesBody.size()-2);
+                }
+
+            }
+
+            ///this line of code sends the packet with details about this player.
+            packData clientPlayerPack = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
+            String clientPlayerMessage = clientPlayerPack.buildStuffs();
+            socketClient.sendData(("running: "+clientPlayerMessage).getBytes());
+
         }
     }
 
@@ -132,9 +181,9 @@ public class GameScreen extends JPanel implements Runnable
             socketServer.start();
         }
 
-        String name = JOptionPane.showInputDialog("What's your name?");
+        clientSidePlayer.setPlayerName(JOptionPane.showInputDialog("What's your name?"));
         String getColor = JOptionPane.showInputDialog("What's your color? (1-4)");
-        Integer color = Integer.parseInt(getColor);
+        clientSidePlayer.setColour(Integer.parseInt(getColor));
 
         // randomizes spawn position of the main player
         Random rand = new Random();
@@ -144,9 +193,11 @@ public class GameScreen extends JPanel implements Runnable
         socketClient.start();
         clientSidePlayer.setX(x);
         clientSidePlayer.setY(y);
-        clientSidePlayer.setColour(color);
-        clientSidePlayer.setPlayerName(name);
-        socketClient.sendData("Connected to server".getBytes());
+
+        ///this code runs all of the player variables through a string converter, packs them and then finally sends to server.
+        packData packClient = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(), clientSidePlayer.getColour(), clientSidePlayer.getPlayerName(), clientSidePlayer.getTrailStatus());
+        String wowString = packClient.buildStuffs();
+        socketClient.sendData(("Connected to server: "+wowString).getBytes());
         try {
             thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -158,14 +209,18 @@ public class GameScreen extends JPanel implements Runnable
         while (serverStatus == 2)
         {
             serverStatus = socketClient.getServerStatus();
-            socketClient.sendData("waiting(IN GAME SCREEN".getBytes());
+            socketClient.sendData("waiting".getBytes());
             try {
-                thread.sleep(1000);
+                thread.sleep(800
+                );
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
+        Integer numPlayers = socketServer.getNumberOfPlayers();
+        System.out.println("Game can see number of players, Total is: "+numPlayers);
+        ///THAT WORKS LEL
         running = true;
         thread = new Thread(this, "Game boop");
         thread.start();
@@ -257,6 +312,7 @@ public class GameScreen extends JPanel implements Runnable
                 down = false;
                 left = false;
                 right = true;
+                System.out.println("RIGHT");
             }
             if(key== KeyEvent.VK_LEFT && !right)
             {
@@ -281,6 +337,18 @@ public class GameScreen extends JPanel implements Runnable
                 left = false;
                 right = false;
 
+            }
+
+            if(key == KeyEvent.VK_SPACE)
+            {
+                if(trail == true)
+                {
+                    trail = false;
+                }
+                else
+                    {
+                        trail = true;
+                    }
             }
 
 

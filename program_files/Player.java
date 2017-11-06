@@ -77,9 +77,5 @@ public class Player
         this.trailStatus = f;
     }
 
-   public static void main(String[]args)
-    {
-        new Player(2,2,2,2,"ye",true);
-    }
 
 }

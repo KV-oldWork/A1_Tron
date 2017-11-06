@@ -2,6 +2,9 @@ import com.sun.org.apache.bcel.internal.classfile.Unknown;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MulticastClient extends Thread
 {
@@ -10,8 +13,7 @@ public class MulticastClient extends Thread
     private DatagramSocket socket;
     private Integer serverStatus;
     /// 1 is player connected, 2 is waiting for players, 3 is in game
-    private String outMessage;
-    private Integer counter = 0;
+    private String finalMessage, numberOfPlayers;
 
 
     public MulticastClient( String ADDR)
@@ -28,6 +30,8 @@ public class MulticastClient extends Thread
 
     public void run()
     {
+        Thread newThread = new Thread();
+        newThread.start();
         while (true)
         {
             String connectedPlayerWord = "Connected", preGameWord = "waiting", inGameWord = "Running";
@@ -39,31 +43,34 @@ public class MulticastClient extends Thread
                 e.printStackTrace();
             }
             String message = new String(packet.getData());
-            System.out.println("server - "+ message);
+            System.out.println("Server - "+ message);
 
             ///checks for players connecting
+//            if(message.toLowerCase().indexOf(playersNumWord.toLowerCase()) != -1)
+//            {
+//                String poop = message;
+//                List<String> numberFindList = new ArrayList<String>(Arrays.asList(poop.split(" ")));
+//                String coolString = numberFindList.get(3);
+//                //I guess you don't have to have it as a int to send it away, maybe convert it to a string later?
+//                //coolString = coolString.replaceAll("\\s+","");
+//                //Integer wow = Integer.parseInt(coolString);
+//            }
+
             if(message.toLowerCase().indexOf(connectedPlayerWord.toLowerCase()) != -1)
             {
                 serverStatus = 1;
-                System.out.println("serverStatus 1 - connected");
             }
 
             if(message.toLowerCase().indexOf(preGameWord.toLowerCase()) != -1)
             {
                 serverStatus = 2;
-                System.out.println("serverStatus2 - waiting");
-            }
 
-
-            if(counter == 20)
-            {
-                message = "program is running";
             }
 
             if(message.toLowerCase().indexOf(inGameWord.toLowerCase()) != -1)
             {
                 serverStatus = 3;
-                System.out.println("serverStatus3 - running");
+                finalMessage = message;
             }
 
         }
@@ -95,8 +102,13 @@ public class MulticastClient extends Thread
         return serverStatus;
     }
 
-    public String getMessage()
+    public String getNumberOfPlayers()
     {
-        return outMessage;
+        return numberOfPlayers;
+    }
+
+    public String getFinalMessage()
+    {
+        return finalMessage;
     }
 }
