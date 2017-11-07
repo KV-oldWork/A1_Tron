@@ -64,11 +64,11 @@ public class MulticastServer extends Thread {
                 waitTimer ++;
                 System.out.println(waitTimer);
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (waitTimer >= 8)
+                if (waitTimer >= 5)
                 {
                     String numberOfPlayersString = numberOfPlayers.toString();
                     sendData(("Number of players: "+numberOfPlayersString).getBytes(), packet.getAddress(), packet.getPort());
@@ -90,7 +90,7 @@ public class MulticastServer extends Thread {
                     i++;
                 }
                 String finalMessage = String.join(" ", messageList);
-                sendData(("Running "+ finalMessage).getBytes(), packet.getAddress(), packet.getPort());
+                sendData(("RunningNow "+ finalMessage).getBytes(), packet.getAddress(), packet.getPort());
                 System.out.println("dude, theres "+numberOfPlayers+" players connected!!!");
             }
         }

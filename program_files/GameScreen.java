@@ -21,7 +21,7 @@ public class GameScreen extends JPanel implements Runnable
 
 //    TODO: private int numberOfPlayers; (total number of players connectected
 //    to the server, loops through drawing method)
-    Player clientSidePlayer = new Player(1, 1, 0, 1, "dad", false);
+    Player clientSidePlayer = new Player(1, 1, 0, 1, "dad", true);
 
     private int clientSideSize = 1;
     private boolean up, down, left, right, trail;
@@ -152,21 +152,21 @@ public class GameScreen extends JPanel implements Runnable
 
 
 
-            if(clientSidePlayer.getTrailStatus() == true)
-            {
-                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
-                bikesBody.add(trailPiece);
-            }
-            if(clientSidePlayer.getTrailStatus() == false)
-            {
-                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
-                bikesBody.add(trailPiece);
-                if(bikesBody.size() > clientSideSize)
-                {
-                    bikesBody.remove(bikesBody.size()-2);
-                }
-
-            }
+//            if(clientSidePlayer.getTrailStatus() == true)
+//            {
+//                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+//                bikesBody.add(trailPiece);
+//            }
+//            if(clientSidePlayer.getTrailStatus() == false)
+//            {
+//                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+//                bikesBody.add(trailPiece);
+//                if(bikesBody.size() > clientSideSize)
+//                {
+//                    bikesBody.remove(bikesBody.size()-2);
+//                }
+//
+//            }
 
             ///this line of code sends the packet with details about this player.
             packData clientPlayerPack = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
@@ -191,19 +191,19 @@ public class GameScreen extends JPanel implements Runnable
             g.drawLine(0, i * 10, Width, i * 10);
         }
 
-        //draws the bikes body part
-        for(int i = 0; i < bikesBody.size(); i ++)
-        {
-            bikesBody.get(i).draw(g);
-        }
-
-//        for (int i = 0; i <= numPlayers;)
+//        //draws the bikes body part
+//        for(int i = 0; i < bikesBody.size(); i ++)
 //        {
-//            for(int x = 0; x < bikesBody.size(); x ++)
-//            {
-//                ConnectedBikesBodies.get(i).get(x).draw(g);
-//            }
+//            bikesBody.get(i).draw(g);
 //        }
+
+        for (int i = 0; i <= numPlayers;)
+        {
+            for(int x = 0; x < bikesBody.size(); x ++)
+            {
+                ConnectedBikesBodies.get(i).get(x).draw(g);
+            }
+        }
     }
 
     public void start()
@@ -236,11 +236,12 @@ public class GameScreen extends JPanel implements Runnable
         String wowString = packClient.buildStuffs();
         socketClient.sendData(("Connected to server: "+wowString).getBytes());
         try {
-            thread.sleep(1000);
+            thread.sleep(4000);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ///your trying to make a 10 second count down from the server to user in waiting period, good luck future kyle. You'll need it.
+        ///your trying to make a 10 second count down from the server to user in waiting period
         Integer serverStatus = socketClient.getServerStatus();
 
         while (serverStatus == 2)
@@ -254,9 +255,22 @@ public class GameScreen extends JPanel implements Runnable
                 e.printStackTrace();
             }
         }
+        packData clientPlayerPack = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
+        String clientPlayerMessage = clientPlayerPack.buildStuffs();
+        socketClient.sendData(("running: "+clientPlayerMessage).getBytes());
+
+        try {
+            System.out.println("I sleep...");
+            thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String yesDaddy;
         if(clientRunningServer == true)
         {
-            numPlayers = socketServer.getNumberOfPlayers();
+            numPlayers = socketClient.getNumberOfPlayers();
+//            yesDaddy = socketClient.getAMessage();
+//            System.out.println("THIS IS THE EVIL"+yesDaddy);
         }
 
         if(clientRunningServer == false)
@@ -264,12 +278,22 @@ public class GameScreen extends JPanel implements Runnable
             numPlayers  = socketClient.getNumberOfPlayers();
             System.out.println(numPlayers);
         }
-
         System.out.println("Game can see number of players, Total is: "+numPlayers);
+
+        try {
+            thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ///THAT WORKS LEL
         running = true;
         thread = new Thread(this, "Game boop");
         thread.start();
+
+
+
+
 
     }
 

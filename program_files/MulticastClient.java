@@ -14,6 +14,7 @@ public class MulticastClient extends Thread
     private Integer serverStatus, numberOfPlayers;
     /// 1 is player connected, 2 is waiting for players, 3 is in game
     private String finalMessage;
+    String aMessage;
 
 
 
@@ -71,10 +72,11 @@ public class MulticastClient extends Thread
             if(message.toLowerCase().indexOf(inGameWord.toLowerCase()) != -1)
             {
                 serverStatus = 3;
-                if (message.toLowerCase().indexOf("Game is running".toLowerCase()) == -1)
+                if (message.toLowerCase().contains("now"))
                 {
                     ArrayList<String> findingNumOfPlayers = new ArrayList<String>(Arrays.asList(message.split(" ")));
                     numberOfPlayers = (findingNumOfPlayers.size()-1) /6;
+                    aMessage = message;
                 }
                 finalMessage = message;
             }
@@ -117,5 +119,10 @@ public class MulticastClient extends Thread
     public String getFinalMessage()
     {
         return finalMessage;
+    }
+
+    public String getAMessage()
+    {
+        return aMessage;
     }
 }
