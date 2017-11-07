@@ -95,8 +95,8 @@ public class GameScreen extends JPanel implements Runnable
             if(left) clientSidePlayer.setX(currentX -= 1) ;
             if(up) clientSidePlayer.setY(currentY -= 1) ;
             if(down) clientSidePlayer.setY(currentY += 1) ;
-            if(trail==true) clientSidePlayer.setTrailStatus(true);
-            if(trail==false) clientSidePlayer.setTrailStatus(false);
+            if(trail) clientSidePlayer.setTrailStatus(true);
+            if(!trail) clientSidePlayer.setTrailStatus(false);
             ticks = 0;
 
             ///makes sure the message send is player details
@@ -109,24 +109,29 @@ public class GameScreen extends JPanel implements Runnable
                     int a = 1, b = 2, c = 3, d = 4, e = 5, f = 6;
                     for(int i = 0; numPlayers > i;)
                     {
-                        ///goes through the final message, converts them to players, then adds the players to the list 'finalPlayers'
-                        Integer first = Integer.parseInt(finalStrings.get(a)), second= Integer.parseInt(finalStrings.get(b)), third = Integer.parseInt(finalStrings.get(c)), fourth =Integer.parseInt(finalStrings.get(d));
-                        Boolean sixth = Boolean.parseBoolean(finalStrings.get(f));
-                        Player newPlayer = new Player(first ,second, third, fourth , finalStrings.get(e), sixth);
-                        finalPlayers.add(newPlayer);
-                        a += 6; b += 6; c += 6; d += 6; e += 6; f += 6;
-                        System.out.println("ye boi it worked "+newPlayer.getPlayerName());
+                        if(finalPlayers.get(i).getPlayerName().indexOf(clientSidePlayer.getPlayerName().toLowerCase()) == -1)
+                        {
+                            ///goes through the final message, converts them to players, then adds the players to the list 'finalPlayers'
+                            Integer first = Integer.parseInt(finalStrings.get(a)), second= Integer.parseInt(finalStrings.get(b)), third = Integer.parseInt(finalStrings.get(c)), fourth =Integer.parseInt(finalStrings.get(d));
+                            Boolean sixth = Boolean.parseBoolean(finalStrings.get(f));
+                            Player newPlayer = new Player(first ,second, third, fourth , finalStrings.get(e), sixth);
+                            finalPlayers.add(newPlayer);
+                            a += 6; b += 6; c += 6; d += 6; e += 6; f += 6;
+                            System.out.println("ye boi it worked "+newPlayer.getPlayerName());
+                        }
                         i++;
                     }
-                    for(int i = 0; numPlayers > i;)
+                    for(int i = 0; finalPlayers.size() > i;)
                     {
-                        ///checks to see if the player being put into the list is the clientside Client
-                        if(finalPlayers.get(i).getPlayerName().indexOf(clientSidePlayer.getPlayerName().toLowerCase()) == -1)
+                        ///if the BikesArray size is smaller than the player size, then it will add mikes into BikesArray.
+                        if(ConnectedBikesBodies.size() < finalPlayers.size())
                         {
                             ArrayList<ObjectPiece> newBikeBody = new ArrayList<ObjectPiece>();
                             ConnectedBikesBodies.add(newBikeBody);
-                            ObjectPiece foreignTrail = new ObjectPiece(finalPlayers.get(i).getX(), finalPlayers.get(i).getY(), 10);
                         }
+                        ///checks to see if the player being put into the list is the clientside Client
+                        ObjectPiece newTrailPiece = new ObjectPiece(finalPlayers.get(i).getX(), finalPlayers.get(i).getY(), 10);
+                        ConnectedBikesBodies.get(i).add(newTrailPiece);
                         i++;
                     }
                 }
