@@ -123,7 +123,9 @@ public class GameScreen extends JPanel implements Runnable
                         ///checks to see if the player being put into the list is the clientside Client
                         if(finalPlayers.get(i).getPlayerName().indexOf(clientSidePlayer.getPlayerName().toLowerCase()) == -1)
                         {
-
+                            ArrayList<ObjectPiece> newBikeBody = new ArrayList<ObjectPiece>();
+                            ConnectedBikesBodies.add(newBikeBody);
+                            ObjectPiece foreignTrail = new ObjectPiece(finalPlayers.get(i).getX(), finalPlayers.get(i).getY(), 10);
                         }
                         i++;
                     }
@@ -144,7 +146,6 @@ public class GameScreen extends JPanel implements Runnable
                 bikesBody.add(trailPiece);
                 if(bikesBody.size() > clientSideSize)
                 {
-
                     bikesBody.remove(bikesBody.size()-2);
                 }
 
