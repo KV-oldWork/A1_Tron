@@ -75,7 +75,6 @@ public class MulticastClient extends Thread
                 {
                     ArrayList<String> findingNumOfPlayers = new ArrayList<String>(Arrays.asList(message.split(" ")));
                     numberOfPlayers = (findingNumOfPlayers.size()-1) /6;
-                    System.out.println("XXXXXXXXXXXXXXXXthis is number of players "+numberOfPlayers);
                 }
                 finalMessage = message;
             }
