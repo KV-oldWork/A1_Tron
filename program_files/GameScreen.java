@@ -16,6 +16,7 @@ public class GameScreen extends JPanel implements Runnable
 
     private ObjectPiece trailPiece;
     private ArrayList<ObjectPiece> bikesBody;
+    private ArrayList<ArrayList<ObjectPiece>> ConnectedBikesBodies = new ArrayList<ArrayList<ObjectPiece>>();
 
 //    TODO: private int numberOfPlayers; (total number of players connectected
 //    to the server, loops through drawing method)
@@ -56,6 +57,7 @@ public class GameScreen extends JPanel implements Runnable
 
     public void tick()
     {
+        /// initializes the clients bike
         if(bikesBody.size() == 0)
         {
             trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
@@ -96,32 +98,38 @@ public class GameScreen extends JPanel implements Runnable
             if(trail==true) clientSidePlayer.setTrailStatus(true);
             if(trail==false) clientSidePlayer.setTrailStatus(false);
             ticks = 0;
-            if(numPlayers >= 1)
+
+            ///makes sure the message send is player details
+            if (finalMessage.toLowerCase().indexOf("Game is running".toLowerCase()) == -1)
             {
-                ArrayList<Player> finalPlayers = new ArrayList<Player>();
-                ArrayList<String> finalStrings = new ArrayList<String>(Arrays.asList(finalMessage.split(" ")));
-                System.out.println("wtf?"+finalStrings);
-                System.out.println("wowzers"+finalStrings.get(0)+" "+finalStrings.get(1)+" "+finalStrings.get(2)+" "+finalStrings.get(3));
-                Integer first = Integer.parseInt(finalStrings.get(0)), second= Integer.parseInt(finalStrings.get(+1)), third = Integer.parseInt(finalStrings.get(2)), fourth =Integer.parseInt(finalStrings.get(3));
+                if(numPlayers >= 1)
+                {
+                    ArrayList<Player> finalPlayers = new ArrayList<Player>();
+                    ArrayList<String> finalStrings = new ArrayList<String>(Arrays.asList(finalMessage.split(" ")));
+                    int a = 1, b = 2, c = 3, d = 4, e = 5, f = 6;
+                    for(int i = 0; numPlayers > i;)
+                    {
+                        ///goes through the final message, converts them to players, then adds the players to the list 'finalPlayers'
+                        Integer first = Integer.parseInt(finalStrings.get(a)), second= Integer.parseInt(finalStrings.get(b)), third = Integer.parseInt(finalStrings.get(c)), fourth =Integer.parseInt(finalStrings.get(d));
+                        Boolean sixth = Boolean.parseBoolean(finalStrings.get(f));
+                        Player newPlayer = new Player(first ,second, third, fourth , finalStrings.get(e), sixth);
+                        finalPlayers.add(newPlayer);
+                        a += 6; b += 6; c += 6; d += 6; e += 6; f += 6;
+                        System.out.println("ye boi it worked "+newPlayer.getPlayerName());
+                        i++;
+                    }
+                    for(int i = 0; numPlayers > i;)
+                    {
+                        ///checks to see if the player being put into the list is the clientside Client
+                        if(finalPlayers.get(i).getPlayerName().indexOf(clientSidePlayer.getPlayerName().toLowerCase()) == -1)
+                        {
 
-//                int a = 0, b = 1, c = 2, d = 3, e = 4, f = 5;
-//                for(int i = 0; numPlayers > i;)
-//                {
-//                    Integer first = Integer.parseInt(finalStrings.get(a)), second= Integer.parseInt(finalStrings.get(b)), third = Integer.parseInt(finalStrings.get(c)), fourth =Integer.parseInt(finalStrings.get(d));
-//                    Boolean sixth = Boolean.parseBoolean(finalStrings.get(f));
-//
-//                    Player newPlayer = new Player(first ,second, third, fourth , finalStrings.get(e), sixth);
-//                    finalPlayers.add(newPlayer);
-//                    a += 6; b += 6; c += 6; d += 6; e += 6; f += 6;
-//                    System.out.println("ye boi it worked"+newPlayer.getPlayerName());
-//                    i++;
-//                }
-//                for(int i = 0; numPlayers > i;)
-//                {
-//
-//                }
-
+                        }
+                        i++;
+                    }
+                }
             }
+
 
 
 
@@ -165,6 +173,7 @@ public class GameScreen extends JPanel implements Runnable
             g.drawLine(0, i * 10, Width, i * 10);
         }
 
+        /// draws the bikes body part
         for(int i = 0; i < bikesBody.size(); i ++)
         {
             bikesBody.get(i).draw(g);
