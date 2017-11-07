@@ -11,9 +11,10 @@ public class MulticastClient extends Thread
     private InetAddress ADDR;
     final static int PORT = 8888;
     private DatagramSocket socket;
-    private Integer serverStatus;
+    private Integer serverStatus, numberOfPlayers;
     /// 1 is player connected, 2 is waiting for players, 3 is in game
-    private String finalMessage, numberOfPlayers;
+    private String finalMessage;
+
 
 
     public MulticastClient( String ADDR)
@@ -70,6 +71,12 @@ public class MulticastClient extends Thread
             if(message.toLowerCase().indexOf(inGameWord.toLowerCase()) != -1)
             {
                 serverStatus = 3;
+                if (message.toLowerCase().indexOf("Game is running".toLowerCase()) == -1)
+                {
+                    ArrayList<String> findingNumOfPlayers = new ArrayList<String>(Arrays.asList(message.split(" ")));
+                    numberOfPlayers = (findingNumOfPlayers.size()-1) /6;
+                    System.out.println("XXXXXXXXXXXXXXXXthis is number of players "+numberOfPlayers);
+                }
                 finalMessage = message;
             }
 
@@ -102,8 +109,9 @@ public class MulticastClient extends Thread
         return serverStatus;
     }
 
-    public String getNumberOfPlayers()
+    public Integer getNumberOfPlayers()
     {
+
         return numberOfPlayers;
     }
 

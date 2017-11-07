@@ -68,7 +68,7 @@ public class MulticastServer extends Thread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (waitTimer >= 3)
+                if (waitTimer >= 8)
                 {
                     String numberOfPlayersString = numberOfPlayers.toString();
                     sendData(("Number of players: "+numberOfPlayersString).getBytes(), packet.getAddress(), packet.getPort());

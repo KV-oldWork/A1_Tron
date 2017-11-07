@@ -17,6 +17,7 @@ public class GameScreen extends JPanel implements Runnable
     private ObjectPiece trailPiece;
     private ArrayList<ObjectPiece> bikesBody;
     private ArrayList<ArrayList<ObjectPiece>> ConnectedBikesBodies = new ArrayList<ArrayList<ObjectPiece>>();
+    private Integer numPlayers;
 
 //    TODO: private int numberOfPlayers; (total number of players connectected
 //    to the server, loops through drawing method)
@@ -86,7 +87,7 @@ public class GameScreen extends JPanel implements Runnable
 
         if(ticks > 1)
         {
-            Integer numPlayers = socketServer.getNumberOfPlayers();
+            Integer numPlayers = socketClient.getNumberOfPlayers();
             String finalMessage = socketClient.getFinalMessage();
             int currentX = clientSidePlayer.getX(), currentY = clientSidePlayer.getY();
 
@@ -109,16 +110,13 @@ public class GameScreen extends JPanel implements Runnable
                     int a = 1, b = 2, c = 3, d = 4, e = 5, f = 6;
                     for(int i = 0; numPlayers > i;)
                     {
-                        if(finalPlayers.get(i).getPlayerName().indexOf(clientSidePlayer.getPlayerName().toLowerCase()) == -1)
-                        {
-                            ///goes through the final message, converts them to players, then adds the players to the list 'finalPlayers'
-                            Integer first = Integer.parseInt(finalStrings.get(a)), second= Integer.parseInt(finalStrings.get(b)), third = Integer.parseInt(finalStrings.get(c)), fourth =Integer.parseInt(finalStrings.get(d));
-                            Boolean sixth = Boolean.parseBoolean(finalStrings.get(f));
-                            Player newPlayer = new Player(first ,second, third, fourth , finalStrings.get(e), sixth);
-                            finalPlayers.add(newPlayer);
-                            a += 6; b += 6; c += 6; d += 6; e += 6; f += 6;
-                            System.out.println("ye boi it worked "+newPlayer.getPlayerName());
-                        }
+                        ///goes through the final message, converts them to players, then adds the players to the list 'finalPlayers'
+                        Integer first = Integer.parseInt(finalStrings.get(a)), second= Integer.parseInt(finalStrings.get(b)), third = Integer.parseInt(finalStrings.get(c)), fourth =Integer.parseInt(finalStrings.get(d));
+                        Boolean sixth = Boolean.parseBoolean(finalStrings.get(f));
+                        Player newPlayer = new Player(first ,second, third, fourth , finalStrings.get(e), sixth);
+                        finalPlayers.add(newPlayer);
+                        a += 6; b += 6; c += 6; d += 6; e += 6; f += 6;
+                        System.out.println("ye boi it worked "+newPlayer.getPlayerName());
                         i++;
                     }
                     for(int i = 0; finalPlayers.size() > i;)
@@ -130,8 +128,22 @@ public class GameScreen extends JPanel implements Runnable
                             ConnectedBikesBodies.add(newBikeBody);
                         }
                         ///checks to see if the player being put into the list is the clientside Client
-                        ObjectPiece newTrailPiece = new ObjectPiece(finalPlayers.get(i).getX(), finalPlayers.get(i).getY(), 10);
-                        ConnectedBikesBodies.get(i).add(newTrailPiece);
+
+                        if(finalPlayers.get(i).getTrailStatus() == true)
+                        {
+                            ObjectPiece newTrailPiece = new ObjectPiece(finalPlayers.get(i).getX(), finalPlayers.get(i).getY(), 10);
+                            ConnectedBikesBodies.get(i).add(newTrailPiece);
+                        }
+
+                        if(finalPlayers.get(i).getTrailStatus() == false)
+                        {
+                            ObjectPiece newTrailPiece = new ObjectPiece(finalPlayers.get(i).getX(), finalPlayers.get(i).getY(), 10);
+                            ConnectedBikesBodies.get(i).add(newTrailPiece);
+                            if(ConnectedBikesBodies.get(i).size() > clientSideSize)
+                            {
+                                ConnectedBikesBodies.get(i).remove(ConnectedBikesBodies.get(i).size()-2);
+                            }
+                        }
                         i++;
                     }
                 }
@@ -190,10 +202,12 @@ public class GameScreen extends JPanel implements Runnable
     {
 
         ///Asks the user if they want to host the server
+        Boolean clientRunningServer = false;
         if(JOptionPane.showConfirmDialog(this, "Do you want to run the server?")==0)
         {
             socketServer = new MulticastServer();
             socketServer.start();
+            clientRunningServer = true;
         }
 
         clientSidePlayer.setPlayerName(JOptionPane.showInputDialog("What's your name?"));
@@ -232,8 +246,17 @@ public class GameScreen extends JPanel implements Runnable
                 e.printStackTrace();
             }
         }
+        if(clientRunningServer == true)
+        {
+            numPlayers = socketServer.getNumberOfPlayers();
+        }
 
-        Integer numPlayers = socketServer.getNumberOfPlayers();
+        if(clientRunningServer == false)
+        {
+            numPlayers  = socketClient.getNumberOfPlayers();
+            System.out.println(numPlayers);
+        }
+
         System.out.println("Game can see number of players, Total is: "+numPlayers);
         ///THAT WORKS LEL
         running = true;
