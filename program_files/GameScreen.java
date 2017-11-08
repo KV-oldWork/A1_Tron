@@ -199,8 +199,10 @@ public class GameScreen extends JPanel implements Runnable
 //            bikesBody.get(i).draw(g);
 //        }
 
-        for (int i = 0; i <= numPlayers;)
+        for (int i = 0; i < numPlayers;)
+        /// YOUR ON THIS, JUST TURNED THE 'i<= numplayers' into i< numplayers, IT NOW RUNS AND PRINTS :D
         {
+            System.out.println("xxxxxxxxxxxxxxxxxxxxxxTHIS"+ConnectedBikesBodies.get(i));
             for(int x = 0; x < ConnectedBikesBodies.get(i).size(); x ++)
             {
                 ConnectedBikesBodies.get(i).get(x).draw(g);
@@ -239,7 +241,7 @@ public class GameScreen extends JPanel implements Runnable
         String wowString = packClient.stringPacker();
         socketClient.sendData(("Connected to server: "+wowString).getBytes());
         try {
-            thread.sleep(4000);
+            thread.sleep(1000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
