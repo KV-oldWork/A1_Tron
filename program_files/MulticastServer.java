@@ -66,6 +66,7 @@ public class MulticastServer extends Thread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                ///Sends a running message to client if the server time is done
                 if (waitTimer >= 5)
                 {
                     String numberOfPlayersString = numberOfPlayers.toString();
