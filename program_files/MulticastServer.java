@@ -1,5 +1,3 @@
-import com.sun.org.apache.bcel.internal.classfile.Unknown;
-
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
@@ -77,15 +75,15 @@ public class MulticastServer extends Thread {
             }
 
             ///if game has started
-            System.out.println("Client IP: ["+packet.getAddress().getHostAddress()+":"+packet.getPort()+"]- " + message);
+
             if (message.toLowerCase().indexOf(inGameWord.toLowerCase()) != -1)
             {
-
+                System.out.println("Client IP: ["+packet.getAddress().getHostAddress()+":"+packet.getPort()+"]- " + message);
                 ArrayList<String> messageList = new ArrayList<String>();
                 for(int i = 0; numberOfPlayers > i;)
                 {
                     packData packPlayers = new packData(playerList.get(i).getX(), playerList.get(i).getY(), playerList.get(i).getScore(), playerList.get(i).getColour(), playerList.get(i).getPlayerName(), playerList.get(i).getTrailStatus());
-                    String combinedVars = packPlayers.buildStuffs();
+                    String combinedVars = packPlayers.stringPacker();
                     messageList.add(combinedVars);
                     i++;
                 }

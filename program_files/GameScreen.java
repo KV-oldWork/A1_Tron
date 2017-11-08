@@ -170,7 +170,7 @@ public class GameScreen extends JPanel implements Runnable
 
             ///this line of code sends the packet with details about this player.
             packData clientPlayerPack = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
-            String clientPlayerMessage = clientPlayerPack.buildStuffs();
+            String clientPlayerMessage = clientPlayerPack.stringPacker();
             socketClient.sendData(("running: "+clientPlayerMessage).getBytes());
 
         }
@@ -233,7 +233,7 @@ public class GameScreen extends JPanel implements Runnable
 
         ///this code runs all of the player variables through a string converter, packs them and then finally sends to server.
         packData packClient = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(), clientSidePlayer.getColour(), clientSidePlayer.getPlayerName(), clientSidePlayer.getTrailStatus());
-        String wowString = packClient.buildStuffs();
+        String wowString = packClient.stringPacker();
         socketClient.sendData(("Connected to server: "+wowString).getBytes());
         try {
             thread.sleep(4000);
@@ -256,7 +256,7 @@ public class GameScreen extends JPanel implements Runnable
             }
         }
         packData clientPlayerPack = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
-        String clientPlayerMessage = clientPlayerPack.buildStuffs();
+        String clientPlayerMessage = clientPlayerPack.stringPacker();
         socketClient.sendData(("running: "+clientPlayerMessage).getBytes());
 
         try {

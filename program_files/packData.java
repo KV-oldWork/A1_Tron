@@ -49,7 +49,7 @@ public class packData
         return convertTrailStat;
     }
 
-    public String buildStuffs()
+    public String stringPacker()
     {
         String totals = getX()+" "+getY()+" "+getScore()+" "+getColor()+" "+getPlayerName()+" "+getTrailStat();
         return totals;
