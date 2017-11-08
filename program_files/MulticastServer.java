@@ -46,7 +46,17 @@ public class MulticastServer extends Thread {
                 List<String>  holdingList = new ArrayList<String>(Arrays.asList(message.split(" ")));
                 Integer holdX = Integer.parseInt(holdingList.get(3)), holdY = Integer.parseInt(holdingList.get(4));
                 Integer holdScore = Integer.parseInt(holdingList.get(5)), holdColor = Integer.parseInt(holdingList.get(6));
-                Boolean holdTrail = Boolean.parseBoolean(holdingList.get(8));
+                System.out.println("This is value 8 -------- "+holdingList.get(8));
+                Boolean holdTrail;
+                ///converts string for the trail into a boolean value.
+                if(holdingList.get(8).contains("true"))
+                {
+                    holdTrail = true;
+                }
+                else
+                    {
+                        holdTrail = false;
+                    }
                 playerList.add(new Player(holdX, holdY, holdScore, holdColor, holdingList.get(7), holdTrail));
                 waitTimer = 0;
 
