@@ -193,19 +193,20 @@ public class GameScreen extends JPanel implements Runnable
             g.drawLine(0, i * 10, Width, i * 10);
         }
 
-        //draws the bikes body part
-        for(int i = 0; i < bikesBody.size(); i ++)
-        {
-            bikesBody.get(i).draw(g);
-        }
-
-//        for (int i = 0; i <= numPlayers;)
+//        //draws the bikes body part
+//        for(int i = 0; i < bikesBody.size(); i ++)
 //        {
-//            for(int x = 0; x < bikesBody.size(); x ++)
-//            {
-//                ConnectedBikesBodies.get(i).get(x).draw(g);
-//            }
+//            bikesBody.get(i).draw(g);
 //        }
+
+        for (int i = 0; i <= numPlayers;)
+        {
+            for(int x = 0; x < ConnectedBikesBodies.get(i).size(); x ++)
+            {
+                ConnectedBikesBodies.get(i).get(x).draw(g);
+            }
+            i++;
+        }
     }
 
     public void start()
