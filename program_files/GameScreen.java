@@ -58,12 +58,12 @@ public class GameScreen extends JPanel implements Runnable
 
     public void tick()
     {
-        /// initializes the clients bike
-        if(bikesBody.size() == 0)
-        {
-            trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
-            bikesBody.add(trailPiece);
-        }
+        //initializes the clients bike(this code does nothing)
+//        if(bikesBody.size() == 0)
+//        {
+//            trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+//            bikesBody.add(trailPiece);
+//        }
 
         /// stops the game if the bike collides with itself
         for(int i = 0; i < bikesBody.size(); i++)
@@ -87,8 +87,10 @@ public class GameScreen extends JPanel implements Runnable
 
         if(ticks > 1)
         {
+            ///client side code to set coordinates.
             Integer numPlayers = socketClient.getNumberOfPlayers();
             String finalMessage = socketClient.getFinalMessage();
+            System.out.println("this is the final message"+finalMessage);
             int currentX = clientSidePlayer.getX(), currentY = clientSidePlayer.getY();
 
             //client position setting based of keyPresses.
@@ -152,21 +154,21 @@ public class GameScreen extends JPanel implements Runnable
 
 
 
-//            if(clientSidePlayer.getTrailStatus() == true)
-//            {
-//                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
-//                bikesBody.add(trailPiece);
-//            }
-//            if(clientSidePlayer.getTrailStatus() == false)
-//            {
-//                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
-//                bikesBody.add(trailPiece);
-//                if(bikesBody.size() > clientSideSize)
-//                {
-//                    bikesBody.remove(bikesBody.size()-2);
-//                }
-//
-//            }
+            if(clientSidePlayer.getTrailStatus() == true)
+            {
+                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+                bikesBody.add(trailPiece);
+            }
+            if(clientSidePlayer.getTrailStatus() == false)
+            {
+                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+                bikesBody.add(trailPiece);
+                if(bikesBody.size() > clientSideSize)
+                {
+                    bikesBody.remove(bikesBody.size()-2);
+                }
+
+            }
 
             ///this line of code sends the packet with details about this player.
             packData clientPlayerPack = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
@@ -191,19 +193,19 @@ public class GameScreen extends JPanel implements Runnable
             g.drawLine(0, i * 10, Width, i * 10);
         }
 
-//        //draws the bikes body part
-//        for(int i = 0; i < bikesBody.size(); i ++)
-//        {
-//            bikesBody.get(i).draw(g);
-//        }
-
-        for (int i = 0; i <= numPlayers;)
+        //draws the bikes body part
+        for(int i = 0; i < bikesBody.size(); i ++)
         {
-            for(int x = 0; x < bikesBody.size(); x ++)
-            {
-                ConnectedBikesBodies.get(i).get(x).draw(g);
-            }
+            bikesBody.get(i).draw(g);
         }
+
+//        for (int i = 0; i <= numPlayers;)
+//        {
+//            for(int x = 0; x < bikesBody.size(); x ++)
+//            {
+//                ConnectedBikesBodies.get(i).get(x).draw(g);
+//            }
+//        }
     }
 
     public void start()
