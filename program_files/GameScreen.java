@@ -13,7 +13,7 @@ class GameScreen extends JPanel implements Runnable
     private ArrayList<ObjectPiece> bikesBody;
     private Integer numPlayers;
     private Player clientSidePlayer;
-    private boolean up, down, left, right, trail, speed;
+    private boolean up, down, left, right, trail, speed, firstTime;
 
     private MulticastClient socketClient;
 
@@ -104,12 +104,43 @@ class GameScreen extends JPanel implements Runnable
             ObjectPiece trailPiece;
             if (!clientSidePlayer.getTrailStatus()) {
             } else {
-                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
-                bikesBody.add(trailPiece);
+                if(speed)
+                {
+                    if(up)
+                    {
+                        trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY()+1, 10, clientSidePlayer.getColour());
+                        bikesBody.add(trailPiece);
+                    }
+                    if(down)
+                    {
+                        trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY()-1, 10, clientSidePlayer.getColour());
+                        bikesBody.add(trailPiece);
+                    }
+                    if(left)
+                    {
+                        trailPiece = new ObjectPiece(clientSidePlayer.getX()+1, clientSidePlayer.getY(), 10, clientSidePlayer.getColour());
+                        bikesBody.add(trailPiece);
+                    }
+                    if(right)
+                    {
+                        trailPiece = new ObjectPiece(clientSidePlayer.getX()-1, clientSidePlayer.getY(), 10, clientSidePlayer.getColour());
+                        bikesBody.add(trailPiece);
+                    }
+                    System.out.println(firstTime+" this is the first");
+                    trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10, clientSidePlayer.getColour());
+                    bikesBody.add(trailPiece);
+
+                }
+                else{
+                    trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10,clientSidePlayer.getColour());
+                    bikesBody.add(trailPiece);
+                    firstTime = true;
+                }
+
             }
             if (clientSidePlayer.getTrailStatus()) {
             } else {
-                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10);
+                trailPiece = new ObjectPiece(clientSidePlayer.getX(), clientSidePlayer.getY(), 10, clientSidePlayer.getColour());
                 bikesBody.add(trailPiece);
                 int clientSideSize = 1;
                 if(bikesBody.size() > clientSideSize)
@@ -131,16 +162,16 @@ class GameScreen extends JPanel implements Runnable
     {
         g.clearRect(0, 0, Width, Height);
 
-        ///draws a number of lines over the screen, for testing purposes
-        g.setColor(Color.BLACK);
-        for(int i = 0; i < Width / 10; i++)
-        {
-            g.drawLine(i * 10, 0, i * 10, Height);
-        }
-        for(int i = 0; i < Height / 10; i ++)
-        {
-            g.drawLine(0, i * 10, Width, i * 10);
-        }
+//        ///draws a number of lines over the screen, for testing purposes
+//        g.setColor(Color.BLACK);
+//        for(int i = 0; i < Width / 10; i++)
+//        {
+//            g.drawLine(i * 10, 0, i * 10, Height);
+//        }
+//        for(int i = 0; i < Height / 10; i ++)
+//        {
+//            g.drawLine(0, i * 10, Width, i * 10);
+//        }
 
         //draws the bikes body part
         for (ObjectPiece aBikesBody : bikesBody) {
