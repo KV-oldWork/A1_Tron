@@ -190,7 +190,7 @@ class GameScreen extends JPanel implements Runnable
         }
 
         clientSidePlayer.setPlayerName(JOptionPane.showInputDialog("What's your name?"));
-        String getColor = JOptionPane.showInputDialog("What's your color? (1-4)");
+        String getColor = JOptionPane.showInputDialog("What's your color?\n1 = red\n2 = black\n3 = green\n4 = blue");
         clientSidePlayer.setColour(Integer.parseInt(getColor));
 
         // randomizes spawn position of the main player
