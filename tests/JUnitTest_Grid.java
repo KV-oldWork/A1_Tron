@@ -1,3 +1,5 @@
 
-public class JUnitTest_Grid {
+public class JUnitTest_Grid
+{
+    int gridWidth, gridHeight;
 }

@@ -105,4 +105,35 @@ Tests: When the user sends presses a keyboard button, will the button pressed be
 
 As a user, I want to be able to send multiple strings to a server and have them read.
 
+Notes: Each user should be sending a string with multiple details to the server, the server should get all of the strings from each user.
+
+Estimate:
+_10 hours_
+
+Priority: Medium
+
+Tests: When a user sends a message to the server, it should be able to read all over the details they sent.
+
 ### Spike Story 3:
+As a user, I want to spawn in a random and unpredictable position each time a new game starts.
+
+Notes: Each player should have their own random x and y.
+
+Estimate:
+_2 hours_
+
+Priority: Low
+
+Tests: When a new player joins a game, is their position random?
+
+### Spike Story 4:
+As a user, I want to have a grid to move my bike on.
+
+Notes:
+
+Estimate:
+_4 hours_
+
+Priority: High
+
+Tests: Can a square grid be made that's visible to users?

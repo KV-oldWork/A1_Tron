@@ -29,7 +29,7 @@ public class JUnitTest_RandomizePosition
             int x = rand.nextInt(100) + 10;
             int y = rand.nextInt(100) + 10;
             System.out.println("Player "+(i)+":");
-            JUnitTest_RandomizePosition testNums = new JUnitTest_RandomizePosition(x, y);
+            JUnitTest_RandomizePosition testRand = new JUnitTest_RandomizePosition(x, y);
         }
     }
 
