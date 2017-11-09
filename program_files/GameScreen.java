@@ -72,11 +72,9 @@ class GameScreen extends JPanel implements Runnable
         if(ticks > 1)
         {
             ///client side code to set coordinates.
-            String finalMessage = socketClient.getFinalMessage();
-            System.out.println("this is the final message"+finalMessage);
             int currentX = clientSidePlayer.getX(), currentY = clientSidePlayer.getY();
 
-            //client position setting based of keyPresses.
+            ///client position setting based of keyPresses.
             if(speed)
             {
                 if(right) clientSidePlayer.setX(currentX +=2);
