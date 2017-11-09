@@ -30,6 +30,8 @@ public class MulticastClient extends Thread
         }
     }
 
+
+
     public void run()
     {
         Thread newThread = new Thread();

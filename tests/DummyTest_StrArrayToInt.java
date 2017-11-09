@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class testStrArrayToInt
+public class DummyTest_StrArrayToInt
 {
     public static void main(String[] args)
     {

@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class Test_AddUser
+public class DummyTest_AddUser
 {
 
     public static String getUserName()

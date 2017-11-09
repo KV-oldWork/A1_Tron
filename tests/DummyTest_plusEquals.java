@@ -1,4 +1,4 @@
-public class Test_plusEquals
+public class DummyTest_plusEquals
 {
     public static void main(String[] args) {
         int i = 4;

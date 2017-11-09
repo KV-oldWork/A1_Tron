@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-public class Test_Mail extends JFrame implements ActionListener
+public class DummyTest_Mail extends JFrame implements ActionListener
 {
     private JLabel toLabel = new JLabel("To:");
     private JTextField toField = new JTextField(24);
@@ -14,7 +14,7 @@ public class Test_Mail extends JFrame implements ActionListener
     JScrollPane scroll = new JScrollPane(message,
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    public Test_Mail()
+    public DummyTest_Mail()
     {
         super("WebBuy Company E-Mail");
         setSize(340, 270);
@@ -38,7 +38,7 @@ public class Test_Mail extends JFrame implements ActionListener
 
     public static void main(String[] arguments)
     {
-        Test_Mail email = new Test_Mail();
+        DummyTest_Mail email = new DummyTest_Mail();
         email.setVisible(true);
     }
     @Override

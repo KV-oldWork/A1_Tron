@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.util.Random;
 
 ///testing to see if I can get random variables between x and y size. Will be useful for putting players in random positions on the grid.
-public class Test_RandomizePositions
+public class DummyTest_RandomizePositions
 {
     private int xPosition, yPosition;
 
-    private Test_RandomizePositions(int x, int y)
+    private DummyTest_RandomizePositions(int x, int y)
     {
         this.xPosition = x;
         this.yPosition = y;
@@ -29,7 +29,7 @@ public class Test_RandomizePositions
             int x = rand.nextInt(100) + 10;
             int y = rand.nextInt(100) + 10;
             System.out.println("Player "+(i)+":");
-            Test_RandomizePositions testRand = new Test_RandomizePositions(x, y);
+            DummyTest_RandomizePositions testRand = new DummyTest_RandomizePositions(x, y);
         }
     }
 

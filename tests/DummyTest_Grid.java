@@ -1,12 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Test_Grid extends JFrame
+public class DummyTest_Grid extends JFrame
 {
     int gridWidth, gridHeight;
     JFrame gridScreen = new JFrame("testingGrid");
 
-    public Test_Grid(int gridWidth, int gridHeight)
+    public DummyTest_Grid(int gridWidth, int gridHeight)
     {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,7 +44,7 @@ public class Test_Grid extends JFrame
 
     public static void main(String[] args)
     {
-        new Test_Grid(500, 500);
+        new DummyTest_Grid(500, 500);
     }
 
     private int getGridWidth()

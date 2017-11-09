@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
-public class Test_MulticastSocketClient
+public class DummyTest_MulticastSocketClient
 {
     final static String INET_ADDR = "224.0.0.3";
     final static int PORT = 8888;

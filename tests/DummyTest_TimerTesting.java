@@ -1,4 +1,4 @@
-public class Test_TimerTesting extends Thread
+public class DummyTest_TimerTesting extends Thread
 {
 
     public static void main (String[] args) throws Exception

@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.net.*;
 
-public class MulticastSender
+public class DummyTest_MulticastSender
 {
     final static String ADDR = "224.0.0.3";
     final static int PORT = 8888;

@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-public class Test_JMovingFrame extends JFrame implements ActionListener
+public class DummyTest_JMovingFrame extends JFrame implements ActionListener
 {
     Container con = getContentPane();
     final int MAX = 8;
@@ -9,7 +9,7 @@ public class Test_JMovingFrame extends JFrame implements ActionListener
     JButton button = new JButton("Press");
     JLabel[] blankLabel = new JLabel[MAX];
     int x = 0, y;
-    public Test_JMovingFrame()
+    public DummyTest_JMovingFrame()
     {
         con.setLayout(new GridLayout(3,3));
         setTitle("Moving Frame");
@@ -36,7 +36,7 @@ public class Test_JMovingFrame extends JFrame implements ActionListener
 
     public static void main(String[] args)
     {
-        Test_JMovingFrame mFrame = new Test_JMovingFrame();
+        DummyTest_JMovingFrame mFrame = new DummyTest_JMovingFrame();
         mFrame.setSize(250, 300);
         mFrame.setVisible(true);
     }

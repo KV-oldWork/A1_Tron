@@ -7,11 +7,11 @@ import java.util.Random;
 
 class GameScreen extends JPanel implements Runnable
 {
-    private static final int Width = 800, Height = 800;
+    private final int Width = 800, Height = 800;
     private Thread thread;
     private boolean running = false;
     private ArrayList<ObjectPiece> bikesBody;
-    private Integer numPlayers;
+    private Integer numPlayers, color= 1;
     private Player clientSidePlayer;
     private boolean up, down, left, right, trail, speed, firstTime;
 
@@ -38,6 +38,36 @@ class GameScreen extends JPanel implements Runnable
 
         start();
     }
+    public int getWidth()
+    {
+        return Width;
+    }
+
+    public int getHeight()
+    {
+        return Height;
+    }
+
+    public boolean getTrailStatus()
+    {
+        return trail;
+    }
+
+    public int getNumPlayers()
+    {
+        return numPlayers;
+    }
+
+    public String getServerMessage()
+    {
+        return("Running "+clientSidePlayer.getX()+" "+clientSidePlayer.getY()+" "+clientSidePlayer.getScore()+" "+ clientSidePlayer.getColour()+" "+clientSidePlayer.getPlayerName()+" "+ clientSidePlayer.getTrailStatus());
+    }
+
+    public int getColor()
+    {
+        return color;
+    }
+
 
 
     private void tick()
@@ -190,7 +220,7 @@ class GameScreen extends JPanel implements Runnable
         }
 
         clientSidePlayer.setPlayerName(JOptionPane.showInputDialog("What's your name?"));
-        String getColor = JOptionPane.showInputDialog("What's your color?\n1 = red\n2 = black\n3 = green\n4 = blue");
+        String getColor = JOptionPane.showInputDialog("What's your color?\n1 = blue\n2 = black\n3 = green\n4 = red");
         clientSidePlayer.setColour(Integer.parseInt(getColor));
 
         // randomizes spawn position of the main player
@@ -403,6 +433,10 @@ class GameScreen extends JPanel implements Runnable
         public void keyReleased(KeyEvent e)
         {
         }
+    }
+   // public int getWidth
+    {
+        //return Width;
     }
 
 }
