@@ -1,10 +1,10 @@
-public class packData
+public class PackData
 {
     Integer x, y, score, color;
     String playerName;
     Boolean trailStat;
 
-    public packData(int x, int y, int score, int color, String playerName, boolean trailStat)
+    public PackData(int x, int y, int score, int color, String playerName, boolean trailStat)
     {
         this.x = x;
         this.y = y;

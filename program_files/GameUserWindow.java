@@ -4,16 +4,14 @@ import java.awt.*;
 public class GameUserWindow extends JFrame
 {
     JFrame mainFrame = new JFrame("tronBoi");
-    JButton randBut1 = new JButton("swag");
+    JButton randBut1 = new JButton("Tron");
 
 
     public GameUserWindow()
     {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tron");
         setResizable(false);
-
-
 
         init();
     }

@@ -149,7 +149,7 @@ class GameScreen extends JPanel implements Runnable
             }
 
             ///this line of code sends the packet with details about this player.
-            packData clientPlayerPack = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
+            PackData clientPlayerPack = new PackData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
             String clientPlayerMessage = clientPlayerPack.stringPacker();
             socketClient.sendData(("running: "+clientPlayerMessage).getBytes());
 
@@ -203,7 +203,7 @@ class GameScreen extends JPanel implements Runnable
         clientSidePlayer.setY(y);
 
         ///this code runs all of the player variables through a string converter, packs them and then finally sends to server.
-        packData packClient = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(), clientSidePlayer.getColour(), clientSidePlayer.getPlayerName(), clientSidePlayer.getTrailStatus());
+        PackData packClient = new PackData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(), clientSidePlayer.getColour(), clientSidePlayer.getPlayerName(), clientSidePlayer.getTrailStatus());
         String wowString = packClient.stringPacker();
         socketClient.sendData(("Connected to server: "+wowString).getBytes());
         try {
@@ -226,7 +226,7 @@ class GameScreen extends JPanel implements Runnable
                 e.printStackTrace();
             }
         }
-        packData clientPlayerPack = new packData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
+        PackData clientPlayerPack = new PackData(clientSidePlayer.getX(), clientSidePlayer.getY(), clientSidePlayer.getScore(),clientSidePlayer.getColour(),clientSidePlayer.getPlayerName(),clientSidePlayer.getTrailStatus());
         String clientPlayerMessage = clientPlayerPack.stringPacker();
         socketClient.sendData(("running: "+clientPlayerMessage).getBytes());
 

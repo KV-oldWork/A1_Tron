@@ -93,7 +93,7 @@ public class MulticastServer extends Thread {
                 ArrayList<String> messageList = new ArrayList<String>();
                 for(int i = 0; numberOfPlayers > i;)
                 {
-                    packData packPlayers = new packData(playerList.get(i).getX(), playerList.get(i).getY(), playerList.get(i).getScore(), playerList.get(i).getColour(), playerList.get(i).getPlayerName(), playerList.get(i).getTrailStatus());
+                    PackData packPlayers = new PackData(playerList.get(i).getX(), playerList.get(i).getY(), playerList.get(i).getScore(), playerList.get(i).getColour(), playerList.get(i).getPlayerName(), playerList.get(i).getTrailStatus());
                     String combinedVars = packPlayers.stringPacker();
                     messageList.add(combinedVars);
                     i++;
